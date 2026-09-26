@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "zendavox": {
+      "command": "cmd.exe",
+      "args": ["/c", "${CLAUDE_PLUGIN_ROOT}\\bin\\zendavox-dev.cmd", "mcp"]
+    }
+  }
+}

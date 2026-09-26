@@ -1,0 +1,17 @@
+{
+  "$schema": "https://code.claude.com/schemas/marketplace.json",
+  "name": "zendavox",
+  "owner": {
+    "name": "Zendavox",
+    "url": "https://www.zendavox.com"
+  },
+  "description": "Zendavox for Claude Code.",
+  "plugins": [
+    {
+      "name": "zendavox-dev",
+      "source": "./plugins/zendavox-dev",
+      "description": "Session memory from your Zendavox project, and a warning when a chat drifts off the subject it started on.",
+      "version": "1.4.1"
+    }
+  ]
+}
