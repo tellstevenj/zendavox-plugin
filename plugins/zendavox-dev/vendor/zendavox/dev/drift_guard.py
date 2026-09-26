@@ -299,20 +299,27 @@ def _away_in_a_row(points: Sequence[drift.Point]) -> int:
     return count
 
 
-def hook_output(verdict: Verdict) -> str:
+def hook_output(verdict: Verdict, *, extra: str | None = None) -> str:
     """The verdict as the harness reads it from a prompt hook's stdout.
 
-    An empty string lets the message through with nothing said.
+    ``extra`` is more for the assistant to read - the recording reminders
+    from :mod:`zendavox.dev.reminders` - carried beside the verdict's own
+    note. A held-back message drops it: the assistant never sees that
+    message at all. An empty string lets the message through with nothing
+    said.
     """
     if verdict.level == STOP:
         return json.dumps({"decision": "block", "reason": verdict.message})
-    if verdict.message is None:
+    context = "\n\n".join(c for c in (verdict.context, extra) if c)
+    if verdict.message is None and not context:
         return ""
-    output: dict[str, object] = {"systemMessage": verdict.message}
-    if verdict.context:
+    output: dict[str, object] = {}
+    if verdict.message is not None:
+        output["systemMessage"] = verdict.message
+    if context:
         output["hookSpecificOutput"] = {
             "hookEventName": "UserPromptSubmit",
-            "additionalContext": verdict.context,
+            "additionalContext": context,
         }
     return json.dumps(output)
 

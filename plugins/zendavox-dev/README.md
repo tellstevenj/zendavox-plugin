@@ -16,6 +16,10 @@ before it, and keeps a chat on the subject it started on.
   countdown; at seven, if a small Claude model agrees the subject has really
   changed, the message is held back and you are told why. Start your message
   with `continue:` to carry on anyway.
+- **When you put something off** ("leave this for now", "to-do list",
+  "tomorrow") or paste a notice from a service you use, it reminds Claude to
+  record it in your project, so it outlives the chat. Set
+  `ZENDAVOX_REMINDERS=off` to turn this off.
 
 ## Install
 

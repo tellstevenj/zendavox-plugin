@@ -11,7 +11,7 @@
       "name": "zendavox-dev",
       "source": "./plugins/zendavox-dev",
       "description": "Session memory from your Zendavox project, and a warning when a chat drifts off the subject it started on.",
-      "version": "1.4.1"
+      "version": "1.5.0"
     }
   ]
 }

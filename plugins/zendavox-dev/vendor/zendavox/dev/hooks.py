@@ -20,7 +20,9 @@ whether or not any model judged it worthwhile.
 ``prompt_submit``
     Before each message is sent, check whether the chat is drifting off the
     subject it started on; warn on screen, and past a limit hold the message
-    back. See :mod:`zendavox.dev.drift_guard`.
+    back. See :mod:`zendavox.dev.drift_guard`. Also remind the assistant to
+    record a parked item or a service notice when the message looks like
+    one - see :mod:`zendavox.dev.reminders`.
 
 **Failing soft is a hard requirement here.** Every path through this module
 ends in exit code 0. A missing key, a sleeping host, a changed reply shape -
@@ -36,7 +38,7 @@ import pathlib
 import sys
 from typing import Any
 
-from zendavox.dev import drift, drift_guard, grouping, state
+from zendavox.dev import drift, drift_guard, grouping, reminders, state
 from zendavox.dev.brief_text import render
 from zendavox.dev.client import Client, DevError
 from zendavox.dev.config import DevConfig, load, redact
@@ -259,10 +261,15 @@ def prompt_submit(raw_input: str, *, setting: str | None = None) -> str:
             setting=drift_guard.mode() if setting is None else setting,
             path=path,
         )
-        return drift_guard.hook_output(verdict)
     except Exception as exc:  # noqa: BLE001 - a hook may not raise, ever
         _note(f"topic check skipped: {exc!r}")
-        return ""
+        verdict = drift_guard.Verdict(drift_guard.QUIET)
+    try:
+        extra = reminders.for_prompt(prompt) if reminders.enabled() else None
+    except Exception as exc:  # noqa: BLE001 - a hook may not raise, ever
+        _note(f"recording reminder skipped: {exc!r}")
+        extra = None
+    return drift_guard.hook_output(verdict, extra=extra)
 
 
 def _cwd_of(payload: dict[str, Any]) -> pathlib.Path:

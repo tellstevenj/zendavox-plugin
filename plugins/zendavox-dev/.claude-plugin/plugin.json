@@ -1,6 +1,6 @@
 {
   "name": "zendavox-dev",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "Session continuity for a Zendavox project: reads the project's brief at session start, records decisions/facts/activity as MCP tools while you work, and closes each session with a summary the next one can skim, and warns on screen when a chat drifts off the subject it started on, holding a message back once it has drifted too far.",
   "author": {
     "name": "Steven Schuyler"
